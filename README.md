@@ -1,2 +1,2 @@
 # taller-punteros-Esteban-valero-T.
-taller de puntuacion
+taller de punteros
