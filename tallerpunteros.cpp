@@ -1,135 +1,147 @@
 #include <iostream>
 using namespace std;
-//1.funcion de intercambio 
-void intercambiar(double *a,double *b){
-    double temp =*a;
-    *a =*b;
-    *b =temp;
+
+// funcion de intercambio
+void intercambiar(int *primerNumero, int *segundoNumero){
+    int valorTemporal = *primerNumero;
+    *primerNumero = *segundoNumero;
+    *segundoNumero = valorTemporal;
 }
-//2.suma de arreglo
-int sumaArreglo(int *arreglo,int n){
-    int suma =0;
-    for(int i=0;i<n;i++){
-        suma +=*(arreglo+i);
+
+// suma del arreglo donde estan guardados los punteros
+int sumaArreglo(int *punteroArreglo, int cantidadElementos){
+    int sumaTotal = 0;
+    for(int indice = 0; indice < cantidadElementos; indice++){
+        sumaTotal += *(punteroArreglo + indice);
     }
-    return suma;
+    return sumaTotal;
 }
-//3. encontrar el mayor
-int mayor(int *arreglo,int n){
-    if(n == 0){
-        cout << "Arreglo vacio\n";
+
+// encontrar el mayor numero guardado en los distintos punteros
+int mayor(int *punteroArreglo, int cantidadElementos){
+    if(cantidadElementos == 0){
+        cout << "Puntero vacio\n";
         return 0;
     }
-    int max =*arreglo;
-    for(int i=0;i<n;i++){
-        if(*(arreglo + i) > max){
-            max = *(arreglo + i);
+    int valorMaximo = *punteroArreglo;
+    for(int indice = 0; indice < cantidadElementos; indice++){
+        if(*(punteroArreglo + indice) > valorMaximo){
+            valorMaximo = *(punteroArreglo + indice);
         }
     }
-    return max;
+    return valorMaximo;
 }
-//4. aplicacion de funcion al arreglo
-int duplicar(int x){
-    return x*2;
+
+// funciones para el callback (funcion q se ejecutara despues q la tarea se complete)
+int duplicar(int valorOriginal){
+    return valorOriginal * 2;
 }
-int triplicar(int x){
-    return x*3;
+int triplicar(int valorOriginal){
+    return valorOriginal * 3;
 }
-// funcion con puntero a la funcion
-void aplicar(int *arreglo, int n, int (*func)(int)){
-    for(int i = 0; i < n; i++){
-        *(arreglo + i) = func(*(arreglo + i));
+
+void aplicar(int *punteroArreglo, int cantidadElementos, int (*operacion)(int)){
+    for(int indice = 0; indice < cantidadElementos; indice++){
+        *(punteroArreglo + indice) = operacion(*(punteroArreglo + indice));
     }
 }
-//5. matriz dinamica y punteros
-void llenarMatriz(int **matriz,int filas,int columnas){
-    for(int i=0; i<filas;i++){
-        for(int j=0;j<columnas;j++){
-            cout<<"elemento numero ["<<i<<"]["<<j<<"]:";
-            cin>>matriz[i][j];
+
+// matriz para mostrar la impresion de los punteros
+void llenarMatriz(int **punteroMatriz, int cantidadFilas, int cantidadColumnas){
+    for(int indiceFila = 0; indiceFila < cantidadFilas; indiceFila++){
+        for(int indiceColumna = 0; indiceColumna < cantidadColumnas; indiceColumna++){
+            cout << "elemento [" << indiceFila << "][" << indiceColumna << "]: ";
+            cin >> *(*(punteroMatriz + indiceFila) + indiceColumna);
         }
     }
 }
-void sumaFilas(int **matriz,int filas,int columnas){
-    for(int i=0;i<filas;i++){
-        int suma=0;
-        for(int j=0;j<columnas;j++){
-            suma +=matriz[i][j];
+
+void sumaFilas(int **punteroMatriz, int cantidadFilas, int cantidadColumnas){
+    for(int indiceFila = 0; indiceFila < cantidadFilas; indiceFila++){
+        int sumaPorFila = 0;
+        for(int indiceColumna = 0; indiceColumna < cantidadColumnas; indiceColumna++){
+            sumaPorFila += *(*(punteroMatriz + indiceFila) + indiceColumna);
         }
-        cout<<"la suma de la fila es: "<<i<<" es: "<<suma<<endl;
+        cout << "Suma de la fila " << indiceFila << ": " << sumaPorFila << endl;
     }
 }
-//5. casting de punteros o memoria
-void verEntero(int *p){
-    cout<<"Valor como entero: "<<*p<<endl;
+
+// Seleccion de punteros
+void verEntero(int *punteroEntero){
+    cout << "Valor al entero: " << *punteroEntero << endl;
 }
-void verBytes(char *p){
-    cout<<"Bytes: ";
-    for(int i=0;i<sizeof(float);i++){
-        cout<<(int)*(p+i)<<" ";
+
+void verBytes(char *punteroByte){
+    cout << "Bytes: ";
+    for(int indiceByte = 0; indiceByte < sizeof(float); indiceByte++){
+        cout << (int)*(punteroByte + indiceByte) << " ";
     }
-    cout<<endl;
+    cout << endl;
 }
-//el main
+
 int main(){
-    //1. intercambio 
-    double x,y;
-    cout<<"Ingrese dos numeros: ";
-    cin >>x>>y;
-    intercambiar(&x, &y);
-    cout << "Intercambiados: " << x << " " << y << endl;
-    //2. suma de arreglo
-    cout<<"\nPunto 2\n";
-    int n;
-    cout<<"Tamano del arreglo: ";
-    cin>>n;
-    int *arr=new int[n];
-    for(int i=0; i<n;i++){
-        cout<<"Dato "<<i<<": ";
-        cin>>arr[i];
+    // intercambio
+    int primerValor, segundoValor;
+    cout << "Ingrese dos numeros enteros: ";
+    cin >> primerValor >> segundoValor;
+    intercambiar(&primerValor, &segundoValor);
+    cout << "Intercambiados: " << primerValor << " " << segundoValor << endl;
+
+    // suma del arreglo donde estan guardados los punteros
+    cout << "\nPunto 2\n";
+    int cantidadElementos;
+    cout << "Tamano del arreglo: ";
+    cin >> cantidadElementos;
+    int *arregloDinamico = new int[cantidadElementos];
+    for(int indice = 0; indice < cantidadElementos; indice++){
+        cout << "Dato " << indice << ": ";
+        cin >> *(arregloDinamico + indice);
     }
-    cout<<"Suma: "<<sumaArreglo(arr, n)<<endl;
-    //3. mayor del arreglo
-    cout<<"\nPunto 3\n";
-    cout<<"Mayor: "<<mayor(arr, n)<<endl;
-    //4. aplicar funcion al arreglo
-    cout<<"\nPunto 4\n";
-    aplicar(arr,n,duplicar);
-    cout << "Duplicado:\n";
-    for(int i=0;i<n;i++){
-        cout<<arr[i]<<" ";
+    cout << "Suma: " << sumaArreglo(arregloDinamico, cantidadElementos) << endl;
+
+    // encontrar el mayor numero guardado en los distintos punteros
+    cout << "\nPunto 3\n";
+    cout << "Mayor: " << mayor(arregloDinamico, cantidadElementos) << endl;
+
+    // aplicar funcion al arreglo la cual se ejecutara despues q la tarea se complete
+    cout << "\nPunto 4\n";
+    aplicar(arregloDinamico, cantidadElementos, duplicar);
+    cout << "Arreglo duplicado:\n";
+    for(int indice = 0; indice < cantidadElementos; indice++){
+        cout << *(arregloDinamico + indice) << " ";
     }
-    cout<<endl;
-    //5. matriz dinamica
-    cout<<"\nPunto 5 (matriz)\n";
-    int filas,columnas;
-    cout<<"Filas: ";
-    cin>>filas;
-    cout<<"Columnas: ";
-    cin>>columnas;
-    int **mat=new int*[filas];
-    for(int i=0;i<filas;i++){
-        mat[i]=new int[columnas];
+    cout << endl;
+
+    // matriz para mostrar la impresion de los punteros
+    cout << "\nPunto 5 (matriz)\n";
+    int cantidadFilas, cantidadColumnas;
+    cout << "Filas: ";
+    cin >> cantidadFilas;
+    cout << "Columnas: ";
+    cin >> cantidadColumnas;
+    int **matrizDinamica = new int*[cantidadFilas];
+    for(int indiceFila = 0; indiceFila < cantidadFilas; indiceFila++){
+        *(matrizDinamica + indiceFila) = new int[cantidadColumnas];
     }
-    llenarMatriz(mat,filas,columnas);
-    sumaFilas(mat,filas,columnas);
-    // liberar memoria
-    for(int i=0;i<filas;i++){
-        delete[] mat[i];
+    llenarMatriz(matrizDinamica, cantidadFilas, cantidadColumnas);
+    sumaFilas(matrizDinamica, cantidadFilas, cantidadColumnas);
+    for(int indiceFila = 0; indiceFila < cantidadFilas; indiceFila++){
+        delete[] *(matrizDinamica + indiceFila);
     }
-    delete[] mat;
-    //5. casting de punteros
-    cout<<"\nPunto 5 (casting)\n";
-    float num;
-    cout<<"Ingrese un float: ";
-    cin>>num;
-    int *pInt=(int*)&num;
-    char *pChar=(char*)&num;
-    cout<<"Direccion float: "<<&num<<endl;
-    cout<<"Direccion int*: "<<pInt<<endl;
-    verEntero(pInt);
-    verBytes(pChar);
-    // liberar arreglo
-    delete[] arr;
+    delete[] matrizDinamica;
+
+    // Seleccion de punteros
+    cout << "\nPunto 5 (seleccion )\n";
+    float numeroFlotante;
+    cout << "Ingrese su numero flotante: ";
+    cin >> numeroFlotante;
+    int  *punteroComoEntero = (int*)  &numeroFlotante;
+    char *punteroComoByte   = (char*) &numeroFlotante;
+    cout << "Direccion del numero flotante: " << &numeroFlotante     << endl;
+    cout << "Direccion int*:  " << punteroComoEntero   << endl;
+    verEntero(punteroComoEntero);
+    verBytes(punteroComoByte);
+
+    delete[] arregloDinamico;
     return 0;
 }
